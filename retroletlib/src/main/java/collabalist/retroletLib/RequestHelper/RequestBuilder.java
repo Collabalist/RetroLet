@@ -6,6 +6,8 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +109,8 @@ public class RequestBuilder {
         @Override
         public void onFailure(Call<Object> call, Throwable t) {
             t.printStackTrace();
-            if (t instanceof IOException) {
+            if (t instanceof IOException || t instanceof UnknownHostException
+                    || t instanceof SocketTimeoutException) {
                 listener.onError("Network Error", "Internet is not working", TAG);
             } else
                 listener.onError("Invalid Request", "" + t.getMessage(), TAG);

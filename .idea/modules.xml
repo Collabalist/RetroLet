@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RetroLet.iml" filepath="$PROJECT_DIR$/RetroLet.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/retroletlib/retroletlib.iml" filepath="$PROJECT_DIR$/retroletlib/retroletlib.iml" />
     </modules>
   </component>
