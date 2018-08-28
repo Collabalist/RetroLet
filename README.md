@@ -9,24 +9,27 @@ works with
 
 ## Implementation
 In your **build.gradle**
-
+    
+````groovy
     allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
 	}
-
+````
 In your application's **build.gradle**
-
+    
+````groovy
     dependencies {
 	        implementation 'com.github.Collabalist:RetroLet:1.0'
 	}
-
+````
 
 ## Usage
 **Get**
-
+    
+````java
      RetroLet.get("Base_URL","END_POINT")
                         .addQuery("key","value")//optional
                         .addHeader("key","value")//optional
@@ -49,10 +52,11 @@ In your application's **build.gradle**
 
                             }
                         });
-
+````
 
 **Post**
-
+    
+````java
      RetroLet.post("Base_URL","END_POINT")
                         .addQuery("key","value")//optional
                         .addHeader("key","value")//optional
@@ -75,4 +79,4 @@ In your application's **build.gradle**
 
                             }
                         });
-
+````
