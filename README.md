@@ -22,7 +22,7 @@ In your application's **build.gradle**
     
 ````groovy
     dependencies {
-	        implementation 'com.github.Collabalist:RetroLet:1.0'
+	        implementation 'com.github.Collabalist:RetroLet:1.1'
 	}
 ````
 
