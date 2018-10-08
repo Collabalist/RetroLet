@@ -10,19 +10,19 @@ works with
 ## Implementation
 In your **build.gradle**
     
-````groovy
-    allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+````jscript
+allprojects {
+		        repositories {
+		                                	...
+			                            maven { url 'https://jitpack.io' }
+		        }
 	}
 ````
 In your application's **build.gradle**
     
 ````groovy
     dependencies {
-	        implementation 'com.github.Collabalist:RetroLet:1.1'
+	        implementation 'com.github.Collabalist:RetroLet:1.5'
 	}
 ````
 
