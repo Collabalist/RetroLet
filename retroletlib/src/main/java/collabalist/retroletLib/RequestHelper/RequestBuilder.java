@@ -39,7 +39,7 @@ public class RequestBuilder {
     Call<Object> call = null;
     int ReqType = -1, TAG = -1;
 
-    public RequestBuilder(String baseUrl, int reqType) {
+    RequestBuilder(String baseUrl, int reqType) {
         this.baseUrl = baseUrl;
         this.ReqType = reqType;
         httpClient = new OkHttpClient.Builder();
@@ -57,7 +57,6 @@ public class RequestBuilder {
 
     public void execute(RequestListener listener) {
         this.listener = listener;
-        this.listener.beforeExecuting(this.baseUrl, getFormInfo(queries, headers), this.TAG);
         if (baseUrl.endsWith("/")) {
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
@@ -77,8 +76,10 @@ public class RequestBuilder {
                     call = requests.postUpload(baseUrl + endPoint, headers, queries, getMultipleFile(files));
                 }
             }
-            if (call != null)
+            if (call != null) {
+                this.listener.beforeExecuting(call.request().url().toString(), getFormInfo(queries, headers), this.TAG);
                 call.enqueue(responseCallback);
+            }
         } else {
             this.listener.onError("Base Url format is wrong.",
                     "Base URL should be end with \"/\"", TAG);
