@@ -113,13 +113,7 @@ public class RequestBuilder {
                                 + "\nerrorBody: " + response.toString(), TAG);
             } else {
                 JSONObject test = null;
-                try {
-                    test = new JSONObject(response.body() + "");
-                    preferences.edit().putString("response", "" + test.toString()).commit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    preferences.edit().putString("response", "" + response.raw()).commit();
-                }
+
                 JsonObject obj = new JsonObject();
                 if (response.body() instanceof LinkedTreeMap) {
                     LinkedTreeMap linkedTreeMap = (LinkedTreeMap) response.body();
@@ -129,6 +123,13 @@ public class RequestBuilder {
                     obj = (JsonObject) response.body();
                     preferences.edit().putString("response", "" + obj.toString()).commit();
                 } else {
+                    try {
+                        test = new JSONObject(response.body() + "");
+                        preferences.edit().putString("response", "" + test.toString()).commit();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        preferences.edit().putString("response", "" + response.raw()).commit();
+                    }
                     try {
                         JsonObject object = new JsonParser().parse(response.body() + "").getAsJsonObject();
                         if (object != null)
