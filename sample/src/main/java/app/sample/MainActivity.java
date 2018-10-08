@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 RetroLet.post("http://demo2server.com/deluxtrip/api/", "save-interests")
                         .addQuery("interest_ids", "[25,24]")
                         .addHeader("Authorization", "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEwMCwiaXNzIjoiaHR0cDovL2RlbW8yc2VydmVyLmNvbS9kZWx1eHRyaXAvYXBpL3NpZ251cCIsImlhdCI6MTUzNjA2MTQ1OCwiZXhwIjozNTQyOTY3OTM1NDg1OCwibmJmIjoxNTM2MDYxNDU4LCJqdGkiOiJqUWlzdGxYUmwyUEI0TVFRIn0.i9AlZJjyvcuTxA3C-AfzbrH9Sxvqi8dbaSPw6-TmSmo")
-                        .build()
+                        .build(MainActivity.this)
                         .execute(new RequestListener() {
                             @Override
                             public void beforeExecuting(String url, Map formInfo, int TAG) {

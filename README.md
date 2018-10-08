@@ -12,11 +12,11 @@ In your **build.gradle**
     
 ````jscript
 allprojects {
-		        repositories {
-		                                	...
-			                            maven { url 'https://jitpack.io' }
-		        }
-	}
+    repositories {
+        ...
+		maven { url 'https://jitpack.io' }
+    }
+}
 ````
 In your application's **build.gradle**
     
@@ -34,7 +34,7 @@ In your application's **build.gradle**
                         .addQuery("key","value")//optional
                         .addHeader("key","value")//optional
                         .addFile("key",new File("File"))//optional
-                        .build()
+                        .build(MainActivity.this)
                         .setTimeOut(connectionTimeOut,readTimeout,writeTimeout)//optional
                         .execute(new RequestListener() {
                             @Override
@@ -61,7 +61,7 @@ In your application's **build.gradle**
                         .addQuery("key","value")//optional
                         .addHeader("key","value")//optional
                         .addFile("key",new File("File"))//optional
-                        .build()
+                        .build(MainActivity.this)
                         .setTimeOut(connectionTimeOut,readTimeout,writeTimeout)//optional
                         .execute(new RequestListener() {
                             @Override
