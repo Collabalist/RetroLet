@@ -84,17 +84,17 @@ public class RetroLet {
         preferences = mContext.getSharedPreferences("collabalist_RetroLet", Context.MODE_PRIVATE);
         if (!this.queries.isEmpty()) {
             JSONObject object = new JSONObject(queries);
-            preferences.edit().putString("queries", object.toString());
+            preferences.edit().putString("queries", object.toString()).commit();
         } else
-            preferences.edit().putString("queries", "");
+            preferences.edit().putString("queries", "").commit();
         if (this.headers.isEmpty()) {
-            preferences.edit().putString("headers", "");
+            preferences.edit().putString("headers", "").commit();
         } else {
             JSONObject obj = new JSONObject(headers);
-            preferences.edit().putString("headers", obj.toString());
+            preferences.edit().putString("headers", obj.toString()).commit();
         }
         if (this.files.isEmpty()) {
-            preferences.edit().putString("files", "");
+            preferences.edit().putString("files", "").commit();
         } else {
             String[] keys = new String[files.size()];
             files.keySet().toArray(keys);
@@ -106,10 +106,10 @@ public class RetroLet {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            preferences.edit().putString("files", obj.toString());
+            preferences.edit().putString("files", obj.toString()).commit();
         }
         preferences.edit().commit();
-        RequestBuilder builder = new RequestBuilder(preferences,this.baseURL, TYPE);
+        RequestBuilder builder = new RequestBuilder(preferences, this.baseURL, TYPE);
         if (!this.queries.isEmpty())
             builder.queries = queries;
         builder.headers = headers;
