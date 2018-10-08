@@ -79,13 +79,7 @@ public class RetroLet {
     }
 
     public RequestBuilder build(Context context) {
-        RequestBuilder builder = new RequestBuilder(this.baseURL, TYPE);
-        if (!this.queries.isEmpty())
-            builder.queries = queries;
-        builder.headers = headers;
-        builder.files = files;
-        builder.TAG = TAG;
-        builder.endPoint = endPoint;
+
         Context mContext = context.getApplicationContext();
         preferences = mContext.getSharedPreferences("collabalist_RetroLet", Context.MODE_PRIVATE);
         if (!this.queries.isEmpty()) {
@@ -115,6 +109,13 @@ public class RetroLet {
             preferences.edit().putString("files", obj.toString());
         }
         preferences.edit().commit();
+        RequestBuilder builder = new RequestBuilder(preferences,this.baseURL, TYPE);
+        if (!this.queries.isEmpty())
+            builder.queries = queries;
+        builder.headers = headers;
+        builder.files = files;
+        builder.TAG = TAG;
+        builder.endPoint = endPoint;
         return builder;
     }
 }

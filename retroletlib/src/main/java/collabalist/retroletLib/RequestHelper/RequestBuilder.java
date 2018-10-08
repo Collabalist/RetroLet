@@ -1,8 +1,15 @@
 package collabalist.retroletLib.RequestHelper;
 
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +46,10 @@ public class RequestBuilder {
     Call<Object> call = null;
     int ReqType = -1, TAG = -1;
 
-    RequestBuilder(String baseUrl, int reqType) {
+    SharedPreferences preferences;
+
+    RequestBuilder(SharedPreferences preferences, String baseUrl, int reqType) {
+        this.preferences = preferences;
         this.baseUrl = baseUrl;
         this.ReqType = reqType;
         httpClient = new OkHttpClient.Builder();
@@ -76,7 +86,9 @@ public class RequestBuilder {
                     call = requests.postUpload(baseUrl + endPoint, headers, queries, getMultipleFile(files));
                 }
             }
+            preferences.edit().putString("requestType", ReqType == 1 ? "GET" : "POST").commit();
             if (call != null) {
+                preferences.edit().putString("url", call.request().url().toString() + "").commit();
                 this.listener.beforeExecuting(call.request().url().toString(), getFormInfo(queries, headers), this.TAG);
                 call.enqueue(responseCallback);
             }
@@ -90,18 +102,41 @@ public class RequestBuilder {
         @Override
         public void onResponse(Call<Object> call, Response<Object> response) {
             if (response.body() == null) {
+                preferences.edit().putString("response", "Raw: " + response.raw()
+                        + "\nMessage: " + response.message()
+                        + "\nStatus: " + response.code()
+                        + "\nerrorBody: " + response.toString()).commit();
                 listener.onError("FatalError",
                         "Raw: " + response.raw()
                                 + "\nMessage: " + response.message()
                                 + "\nStatus: " + response.code()
                                 + "\nerrorBody: " + response.toString(), TAG);
             } else {
+                JSONObject test = null;
+                try {
+                    test = new JSONObject(response.body() + "");
+                    preferences.edit().putString("response", "" + test.toString()).commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    preferences.edit().putString("response", "" + response.raw()).commit();
+                }
                 JsonObject obj = new JsonObject();
                 if (response.body() instanceof LinkedTreeMap) {
                     LinkedTreeMap linkedTreeMap = (LinkedTreeMap) response.body();
                     obj = new Gson().toJsonTree(linkedTreeMap).getAsJsonObject();
+                    preferences.edit().putString("response", "" + obj.toString()).commit();
                 } else if (response.body() instanceof JsonObject) {
                     obj = (JsonObject) response.body();
+                    preferences.edit().putString("response", "" + obj.toString()).commit();
+                } else {
+                    try {
+                        JsonObject object = new JsonParser().parse(response.body() + "").getAsJsonObject();
+                        if (object != null)
+                            obj = object;
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                        preferences.edit().putString("response", "" + response.raw()).commit();
+                    }
                 }
                 listener.onResponse(obj.toString(), TAG);
             }
@@ -113,8 +148,11 @@ public class RequestBuilder {
             if (t instanceof IOException || t instanceof UnknownHostException
                     || t instanceof SocketTimeoutException) {
                 listener.onError("Network Error", "Internet is not working", TAG);
-            } else
+                preferences.edit().putString("response", "Internet is not working").commit();
+            } else {
                 listener.onError("Invalid Request", "" + t.getMessage(), TAG);
+                preferences.edit().putString("response", "Invalid Request: \n" + t.getMessage()).commit();
+            }
         }
     };
 
